@@ -5,33 +5,29 @@ const depManager = {
   cbs: []
 };
 
-function observe(obj, key) {
-  Object.defineProperty(obj, key, {
-    get(){
-      if(initBind){
-        initBind.cbs.push()
-      };
-      return obj[key]
-    },
-    set(oldVal, newVal){
-      cbs.forEach(item => item());
-      obj[key] = newVal;
-    },
-    configurable: true,
-    writable: true
-  })
+class ObservaleObject {
+
+}
+
+function startCollect(callback){
+  depManager.cbs.push(callback);
+}
+
+function endCollect(){
+  initBind = false;
 }
 
 const observable = function (obj) {
+  return new ObservaleObject(obj);
   for (const key in obj) {
-    observe(obj, key)
+    observe(obj, key, obj[key])
   }
 }
 
 const autorun = function (callback) {
-  startCollect();
+  startCollect(callback);
   callback();
-  endCollect();
+  // endCollect();
 };
 
 observable(obj);
